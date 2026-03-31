@@ -1,0 +1,6 @@
+django>=4.2
+djangorestframework>=3.14
+djangorestframework-simplejwt>=5.2
+psycopg2-binary>=2.9
+bcrypt>=4.1
+django-cors-headers>=4.6
