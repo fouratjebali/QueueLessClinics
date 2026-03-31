@@ -1,0 +1,9 @@
+.venv/
+node_modules/
+**/node_modules/
+**/__pycache__/
+*.py[cod]
+*.log
+django-backend/db.sqlite3
+angular-app/dist/
+

@@ -1,0 +1,123 @@
+services:
+  angular:
+    container_name: queueless-angular-frontend
+    build:
+      context: ./angular-app
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./angular-app:/app
+      - angular_node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+    networks:
+      - queueless-network
+    depends_on:
+      - backend
+
+  backend:
+    container_name: queueless-backend-api
+    build:
+      context: ./django-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./django-backend:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.settings
+      - DEBUG=1
+      - SECRET_KEY=your-super-secret-django-key-change-in-production
+      - ALLOWED_HOSTS=localhost,127.0.0.1,backend
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=queueless_clinic
+      - DB_USER=queueless_admin
+      - DB_PASSWORD=QueueLess2026!Secure
+      - DATABASE_URL=postgresql://queueless_admin:QueueLess2026%21Secure@postgres:5432/queueless_clinic
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=QueueLessRedis2026!
+      - CORS_ALLOWED_ORIGINS=http://localhost:4200
+    networks:
+      - queueless-network
+    depends_on:
+      - postgres
+      - redis
+    # Start Django development server.
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+  postgres:
+    container_name: queueless-postgres-db
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: queueless_admin
+      POSTGRES_PASSWORD: QueueLess2026!Secure
+      POSTGRES_DB: queueless_clinic
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    networks:
+      - queueless-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U queueless_admin -d queueless_clinic"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    container_name: queueless-redis-cache
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --requirepass QueueLessRedis2026!
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - queueless-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "QueueLessRedis2026!", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  pgadmin:
+    container_name: queueless-pgadmin
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@queueless.tn
+      PGADMIN_DEFAULT_PASSWORD: AdminPassword123!
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - queueless-network
+    depends_on:
+      - postgres
+    profiles:
+      - dev 
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  angular_node_modules:
+    driver: local
+
+networks:
+  queueless-network:
+    driver: bridge
