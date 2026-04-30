@@ -1,0 +1,89 @@
+﻿<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer mode="side" opened class="staff-sidenav">
+    <div class="sidenav-header">
+      <div class="brand-row">
+        <span class="logo-text">Queue<span class="highlight">Less</span></span>
+        <span class="staff-badge">STAFF</span>
+      </div>
+      <div class="brand-subtitle">Clinic Operations</div>
+    </div>
+
+    <mat-nav-list class="nav-list">
+      <div class="menu-group-label">Main Menu</div>
+      <a mat-list-item routerLink="/staff/dashboard" routerLinkActive="active" #dashboard="routerLinkActive" [class.active]="dashboard.isActive">
+        <mat-icon>space_dashboard</mat-icon>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a mat-list-item routerLink="/staff/queue-history" routerLinkActive="active" #history="routerLinkActive" [class.active]="history.isActive">
+        <mat-icon>history</mat-icon>
+        <span class="nav-label">Queue History</span>
+      </a>
+      <a mat-list-item routerLink="/staff/reports" routerLinkActive="active" #reports="routerLinkActive" [class.active]="reports.isActive">
+        <mat-icon>description</mat-icon>
+        <span class="nav-label">Reports</span>
+      </a>
+      <a mat-list-item routerLink="/staff/services" routerLinkActive="active" #services="routerLinkActive" [class.active]="services.isActive">
+        <mat-icon>medical_services</mat-icon>
+        <span class="nav-label">Services</span>
+      </a>
+      <a mat-list-item routerLink="/staff/settings" routerLinkActive="active" #settings="routerLinkActive" [class.active]="settings.isActive">
+        <mat-icon>tune</mat-icon>
+        <span class="nav-label">Settings</span>
+      </a>
+
+      <mat-divider class="nav-divider"></mat-divider>
+
+      <a mat-list-item (click)="logout()" class="logout-item">
+        <mat-icon>logout</mat-icon>
+        <span class="nav-label">Deconnexion</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <mat-toolbar class="staff-toolbar">
+      <button mat-icon-button (click)="drawer.toggle()" class="menu-toggle">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <div class="toolbar-title-block">
+        <span class="title">QueueLess Staff</span>
+        <span class="subtitle">Clinic Workspace</span>
+      </div>
+
+      <span class="spacer"></span>
+
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-btn">
+        <span class="user-avatar">{{ userInitials }}</span>
+        <span class="user-meta">
+          <span class="user-name">{{ userFullName }}</span>
+          <span class="user-role">Staff</span>
+        </span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+
+      <mat-menu #userMenu="matMenu" class="user-menu" xPosition="before">
+        <div class="menu-profile">
+          <div class="menu-avatar">{{ userInitials }}</div>
+          <div class="menu-user">
+            <div class="menu-user-name">{{ userFullName }}</div>
+            <div class="menu-user-role">Staff</div>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item routerLink="/staff/profile">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Deconnexion</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <div class="staff-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
