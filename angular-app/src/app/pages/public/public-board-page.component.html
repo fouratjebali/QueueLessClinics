@@ -1,0 +1,27 @@
+<div class="board" *ngIf="clinic; else loadingTemplate">
+  <header class="board-header">
+    <div class="clinic-name">{{ clinic?.name }}</div>
+    <div class="clock">{{ time | date:'HH:mm:ss' }}</div>
+  </header>
+  <section class="current">
+    <p class="label">MAINTENANT À SERVIR</p>
+    <h1 class="ticket-number">{{ current?.ticket_number || '—' }}</h1>
+    <p class="call-text" *ngIf="current">Veuillez vous présenter à l'accueil SVP</p>
+  </section>
+  <section class="next-list">
+    <h3>Prochains Tickets :</h3>
+    <ul>
+      <li *ngFor="let t of next">
+        <span class="ticket">{{ t.ticket_number }}</span>
+        <span class="service">{{ t.service_name || 'Service' }}</span>
+      </li>
+      <li *ngIf="next.length === 0">Aucun ticket en attente</li>
+    </ul>
+  </section>
+  <footer class="board-footer">
+    <p>📢 Bienvenue • Respectez la distance</p>
+  </footer>
+</div>
+<ng-template #loadingTemplate>
+  <p>Chargement de l'affichage public...</p>
+</ng-template>
