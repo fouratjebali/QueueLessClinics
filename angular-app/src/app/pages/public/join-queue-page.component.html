@@ -1,0 +1,49 @@
+<div class="join-container" *ngIf="clinic; else loadingTemplate">
+  <mat-card class="clinic-card">
+    <mat-card-header>
+      <mat-card-title>{{ clinic?.name }}</mat-card-title>
+      <mat-card-subtitle>{{ clinic?.street }}, {{ clinic?.city }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="queue-info">
+        📊 {{ queueLength }} personne{{ queueLength > 1 ? 's' : '' }} devant
+        • ~{{ estimatedWait }} min attente
+      </p>
+      <form [formGroup]="joinForm" (ngSubmit)="joinQueue()" class="join-form">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Nom complet</mat-label>
+          <input matInput formControlName="fullName" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="phone" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Email (optionnel)</mat-label>
+          <input matInput formControlName="email">
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Service</mat-label>
+          <mat-select formControlName="service" required>
+            <mat-option *ngFor="let s of services" [value]="s.id">{{ s.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Notes</mat-label>
+          <textarea matInput formControlName="notes" rows="2"></textarea>
+        </mat-form-field>
+        <mat-checkbox formControlName="accept">J'accepte les termes</mat-checkbox>
+        <button mat-raised-button color="primary" type="submit" [disabled]="loading || joinForm.invalid">
+          Rejoindre la File
+        </button>
+        <p class="message" *ngIf="message">{{ message }}</p>
+      </form>
+      <div class="track-link">
+        <a routerLink="/public/track">Déjà un ticket ? Suivre ma position →</a>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+<ng-template #loadingTemplate>
+  <p>Chargement...</p>
+</ng-template>
