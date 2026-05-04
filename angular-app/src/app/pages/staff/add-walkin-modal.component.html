@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>Ajouter un patient Walk-in</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="walkin-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nom du patient</mat-label>
+      <input matInput formControlName="patient_name" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Téléphone</mat-label>
+      <input matInput formControlName="patient_phone" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Service</mat-label>
+      <mat-select formControlName="service" required>
+        <mat-option *ngFor="let service of services" [value]="service.id">{{ service.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <label class="priority-label">Priorité :</label>
+    <mat-radio-group formControlName="priority" class="priority-group" aria-label="Priorité">
+      <mat-radio-button *ngFor="let p of priorities" [value]="p.value">{{ p.label }}</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Notes</mat-label>
+      <textarea matInput formControlName="notes" rows="3"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">Ajouter à la file</button>
+</mat-dialog-actions>
