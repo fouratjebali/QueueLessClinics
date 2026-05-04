@@ -1,0 +1,56 @@
+<div class="services-settings">
+  <div class="head-row">
+    <h2>Services Management</h2>
+    <div class="head-actions">
+      <button mat-raised-button color="primary" (click)="openAddService()">+ Add service</button>
+      <button mat-stroked-button (click)="loadServices()">Refresh</button>
+    </div>
+  </div>
+
+  <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <table mat-table [dataSource]="services" class="services-table" *ngIf="!loading">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let service">{{ service.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="duration">
+      <th mat-header-cell *matHeaderCellDef>Duration (min)</th>
+      <td mat-cell *matCellDef="let service">{{ service.estimated_duration }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef>Code</th>
+      <td mat-cell *matCellDef="let service">{{ service.code || '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="active">
+      <th mat-header-cell *matHeaderCellDef>Active</th>
+      <td mat-cell *matCellDef="let service">
+        <mat-slide-toggle color="primary" [checked]="service.is_active" (change)="toggleActive(service)"></mat-slide-toggle>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="order">
+      <th mat-header-cell *matHeaderCellDef>Order</th>
+      <td mat-cell *matCellDef="let service">{{ service.display_order }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let service" class="actions-cell">
+        <button mat-icon-button color="primary" (click)="openEditService(service)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button (click)="moveUp(service)"><mat-icon>arrow_upward</mat-icon></button>
+        <button mat-icon-button (click)="moveDown(service)"><mat-icon>arrow_downward</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="deleteService(service)"><mat-icon>delete</mat-icon></button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <p *ngIf="!loading && !services.length">No services found for this clinic.</p>
+  <p *ngIf="loading">Loading services...</p>
+</div>
