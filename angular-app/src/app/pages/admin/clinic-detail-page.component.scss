@@ -1,0 +1,26 @@
+.clinic-detail-page {
+  .panel {
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    max-width: 780px;
+  }
+
+  .wide {
+    width: 100%;
+  }
+
+  .json-box {
+    width: 100%;
+    min-height: 180px;
+    padding: 0.7rem;
+    border: 1px solid #c8d2de;
+    border-radius: 8px;
+    font-family: Consolas, 'Courier New', monospace;
+  }
+
+  .table {
+    width: 100%;
+  }
+}
