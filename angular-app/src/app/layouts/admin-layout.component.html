@@ -1,0 +1,85 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer mode="side" opened class="admin-sidenav">
+    <div class="sidenav-header">
+      <div class="brand-row">
+        <span class="logo-text">Queue<span class="highlight">Less</span></span>
+        <span class="admin-badge">ADMIN</span>
+      </div>
+      <div class="brand-subtitle">Operations Console</div>
+    </div>
+
+    <mat-nav-list class="nav-list">
+      <div class="menu-group-label">Main Menu</div>
+      <a mat-list-item routerLink="/admin/analytics" routerLinkActive="active" #analytics="routerLinkActive" [class.active]="analytics.isActive">
+        <mat-icon>insights</mat-icon>
+        <span class="nav-label">Analytics</span>
+      </a>
+      <a mat-list-item routerLink="/admin/clinics" routerLinkActive="active" #clinics="routerLinkActive" [class.active]="clinics.isActive">
+        <mat-icon>business</mat-icon>
+        <span class="nav-label">Clinics</span>
+      </a>
+      <a mat-list-item routerLink="/admin/users" routerLinkActive="active" #users="routerLinkActive" [class.active]="users.isActive">
+        <mat-icon>group</mat-icon>
+        <span class="nav-label">Users</span>
+      </a>
+      <a mat-list-item routerLink="/admin/audit-logs" routerLinkActive="active" #audit="routerLinkActive" [class.active]="audit.isActive">
+        <mat-icon>policy</mat-icon>
+        <span class="nav-label">Audit Logs</span>
+      </a>
+      <a mat-list-item routerLink="/admin/settings" routerLinkActive="active" #settings="routerLinkActive" [class.active]="settings.isActive">
+        <mat-icon>tune</mat-icon>
+        <span class="nav-label">Settings</span>
+      </a>
+
+      <mat-divider class="nav-divider"></mat-divider>
+
+      <a mat-list-item (click)="logout()" class="logout-item">
+        <mat-icon>logout</mat-icon>
+        <span class="nav-label">Déconnexion</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <mat-toolbar class="admin-toolbar">
+      <button mat-icon-button (click)="drawer.toggle()" class="menu-toggle">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <div class="toolbar-title-block">
+        <span class="title">QueueLess Admin</span>
+        <span class="subtitle">Platform Management</span>
+      </div>
+
+      <span class="spacer"></span>
+
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-btn">
+        <span class="user-avatar">{{ userInitials }}</span>
+        <span class="user-meta">
+          <span class="user-name">{{ userFullName }}</span>
+          <span class="user-role">Administrator</span>
+        </span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+
+      <mat-menu #userMenu="matMenu" class="user-menu" xPosition="before">
+        <div class="menu-profile">
+          <div class="menu-avatar">{{ userInitials }}</div>
+          <div class="menu-user">
+            <div class="menu-user-name">{{ userFullName }}</div>
+            <div class="menu-user-role">Administrator</div>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Déconnexion</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <div class="admin-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
