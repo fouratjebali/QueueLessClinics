@@ -1,0 +1,33 @@
+.track-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 2rem auto;
+}
+
+.track-card {
+  padding: 1rem;
+}
+
+.track-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.error {
+  margin-top: 0.5rem;
+  color: #c62828;
+}
+
+.join-link {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  a {
+    color: #1e88e5;
+    text-decoration: none;
+  }
+}
