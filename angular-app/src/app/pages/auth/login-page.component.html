@@ -1,0 +1,187 @@
+<div class="login-wrapper">
+  <!-- Left Side - Brand Section with Modern Design -->
+  <div class="brand-section">
+    <div class="brand-content">
+      <!-- Animated Background Elements -->
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+      </div>
+
+      <!-- Logo and Brand -->
+      <div class="brand-header">
+        <div class="logo-wrapper">
+          <mat-icon class="logo-icon">local_hospital</mat-icon>
+          <span class="logo-text">Queue<span class="highlight">Less</span></span>
+        </div>
+        <span class="badge">Healthcare Queue Management</span>
+      </div>
+
+      <!-- Main Content -->
+      <div class="brand-main">
+        <h1 class="brand-title">
+          Welcome Back to<br />
+          <span class="gradient-text">QueueLess Clinic</span>
+        </h1>
+        
+        <p class="brand-description">
+          Streamline your clinic's queue management with our intelligent system. 
+          Join thousands of satisfied healthcare providers.
+        </p>
+
+        <!-- Feature List with Icons -->
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon" style="background: rgba(37, 99, 235, 0.1);">
+              <mat-icon style="color: #2563eb;">timer</mat-icon>
+            </div>
+            <div class="feature-text">
+              <h4>Real-time Queue</h4>
+              <p>Live tracking and updates</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon" style="background: rgba(139, 92, 246, 0.1);">
+              <mat-icon style="color: #8b5cf6;">touch_app</mat-icon>
+            </div>
+            <div class="feature-text">
+              <h4>Self-Service</h4>
+              <p>Patient-friendly interface</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon" style="background: rgba(16, 185, 129, 0.1);">
+              <mat-icon style="color: #10b981;">analytics</mat-icon>
+            </div>
+            <div class="feature-text">
+              <h4>Analytics</h4>
+              <p>Insights and reports</p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-icon" style="background: rgba(245, 158, 11, 0.1);">
+              <mat-icon style="color: #f59e0b;">security</mat-icon>
+            </div>
+            <div class="feature-text">
+              <h4>Secure</h4>
+              <p>HIPAA compliant</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="brand-footer">
+        <p>© 2026 QueueLess Clinic. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side - Login Form Section -->
+  <div class="form-section">
+    <div class="form-container">
+      <!-- Header -->
+      <div class="form-header">
+        <button type="button" mat-stroked-button class="back-btn" (click)="goToPublic()">
+          <mat-icon>arrow_back</mat-icon>
+          Back
+        </button>
+        <h2>Welcome back</h2>
+        <p>Please enter your details to sign in</p>
+      </div>
+
+      <!-- Login Form -->
+      <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
+        <!-- Email Field -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Email address</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="Enter your email">
+          <mat-icon matPrefix>email</mat-icon>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+            Please enter a valid email
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Password Field -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" placeholder="Enter your password">
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix type="button" (click)="hide = !hide" class="password-toggle">
+            <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Options Row -->
+        <div class="form-options">
+          <mat-checkbox formControlName="remember" color="primary">Remember me</mat-checkbox>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" *ngIf="error">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ error }}</span>
+        </div>
+
+        <!-- Submit Button -->
+        <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="loading">
+          <span *ngIf="!loading">Sign in</span>
+          <mat-spinner diameter="24" *ngIf="loading"></mat-spinner>
+        </button>
+
+        <!-- Alternative Login Options -->
+        <div class="alternative-login">
+          <div class="divider">
+            <span>Or continue with</span>
+          </div>
+          
+          <div class="social-buttons">
+            <button type="button" mat-stroked-button class="social-btn google">
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20">
+              Google
+            </button>
+            <button type="button" mat-stroked-button class="social-btn microsoft">
+              <mat-icon>microsoft</mat-icon>
+              Microsoft
+            </button>
+          </div>
+        </div>
+
+        <!-- Sign Up Link -->
+        <div class="signup-prompt">
+          Don't have an account? 
+          <a href="#" class="signup-link">Sign up for free</a>
+        </div>
+      </form>
+
+      <!-- Demo Credentials Card -->
+      <div class="demo-credentials">
+        <div class="demo-header" (click)="showDemo = !showDemo">
+          <mat-icon>info_outline</mat-icon>
+          <span>Demo credentials</span>
+          <mat-icon>{{ showDemo ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        <div class="demo-content" *ngIf="showDemo">
+          <div class="credential-item">
+            <strong>Admin:</strong> admin@queueless.com / admin123
+          </div>
+          <div class="credential-item">
+            <strong>Staff:</strong> staff@queueless.com / staff123
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

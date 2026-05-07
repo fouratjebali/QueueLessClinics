@@ -1,0 +1,54 @@
+.user-profile {
+  padding: 1rem;
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    margin: 1rem 0 0.5rem;
+  }
+}
+
+.info-message {
+  margin: 0 0 0.75rem;
+  color: #0f5132;
+  background: #d1e7dd;
+  border: 1px solid #badbcc;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.error-message {
+  margin: 0 0 0.75rem;
+  color: #842029;
+  background: #f8d7da;
+  border: 1px solid #f5c2c7;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .half-width {
+    width: 100%;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

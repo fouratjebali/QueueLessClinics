@@ -1,0 +1,288 @@
+<!-- Modern Navbar -->
+<mat-toolbar class="public-toolbar">
+  <div class="toolbar-container">
+    <div class="logo-section" routerLink="/public">
+      <mat-icon class="logo-icon">local_hospital</mat-icon>
+      <span class="logo-text">Queue<span class="highlight">Less</span> Clinic</span>
+    </div>
+
+    <!-- Desktop Navigation -->
+    <div class="nav-links desktop-nav">
+      <a mat-button routerLink="/public" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>home</mat-icon>
+        Home
+      </a>
+      <a mat-button (click)="scrollToClinics()" routerLinkActive="active">
+        <mat-icon>store</mat-icon>
+        Clinics
+      </a>
+      <a mat-button routerLink="/public/track" routerLinkActive="active">
+        <mat-icon>track_changes</mat-icon>
+        Track Queue
+      </a>
+      <a mat-button routerLink="/public/appointments" routerLinkActive="active">
+        <mat-icon>event</mat-icon>
+        Appointments
+      </a>
+      <a mat-button (click)="scrollToFooter()">
+        <mat-icon>contact_support</mat-icon>
+        Contact
+      </a>
+    </div>
+
+    <!-- Right Side Actions -->
+    <div class="toolbar-actions">
+      <button mat-icon-button class="notification-btn" [matMenuTriggerFor]="myTicketsMenu" (click)="loadRecentTickets()">
+        <mat-icon [matBadge]="unreadNotificationsCount" [matBadgeHidden]="unreadNotificationsCount === 0" matBadgeColor="accent">confirmation_number</mat-icon>
+      </button>
+
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-btn">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <!-- Mobile Menu Button -->
+      <button mat-icon-button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+  </div>
+</mat-toolbar>
+
+<!-- Mobile Navigation Menu -->
+<div class="mobile-nav-overlay" [class.show]="mobileMenuOpen" (click)="toggleMobileMenu()"></div>
+<div class="mobile-nav-menu" [class.show]="mobileMenuOpen">
+  <div class="mobile-nav-header">
+    <div class="logo-section" routerLink="/public" (click)="toggleMobileMenu()">
+      <mat-icon class="logo-icon">local_hospital</mat-icon>
+      <span class="logo-text">Queue<span class="highlight">Less</span></span>
+    </div>
+    <button mat-icon-button (click)="toggleMobileMenu()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="mobile-nav-links">
+    <a mat-button routerLink="/public" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="toggleMobileMenu()">
+      <mat-icon>home</mat-icon>
+      Home
+    </a>
+    <a mat-button routerLink="/public/clinics" routerLinkActive="active" (click)="toggleMobileMenu()">
+      <mat-icon>store</mat-icon>
+      Clinics
+    </a>
+    <a mat-button routerLink="/public/track" routerLinkActive="active" (click)="toggleMobileMenu()">
+      <mat-icon>track_changes</mat-icon>
+      Track Queue
+    </a>
+    <a mat-button routerLink="/public/appointments" routerLinkActive="active" (click)="toggleMobileMenu()">
+      <mat-icon>event</mat-icon>
+      Appointments
+    </a>
+    <a mat-button (click)="scrollToFooter(); toggleMobileMenu()">
+      <mat-icon>contact_support</mat-icon>
+      Contact
+    </a>
+    <mat-divider></mat-divider>
+    <a mat-button routerLink="/auth/login" (click)="toggleMobileMenu()">
+      <mat-icon>login</mat-icon>
+      Login
+    </a>
+    <a mat-button routerLink="/admin" (click)="toggleMobileMenu()">
+      <mat-icon>admin_panel_settings</mat-icon>
+      Admin
+    </a>
+    <a mat-button routerLink="/staff" (click)="toggleMobileMenu()">
+      <mat-icon>badge</mat-icon>
+      Staff
+    </a>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="public-content">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Modern Footer -->
+<footer class="public-footer">
+  <div class="footer-container">
+    <!-- Footer Top Section -->
+    <div class="footer-top">
+      <!-- Company Info -->
+      <div class="footer-section company-info">
+        <div class="footer-logo" routerLink="/public">
+          <mat-icon>local_hospital</mat-icon>
+          <span>Queue<span class="highlight">Less</span> Clinic</span>
+        </div>
+        <p class="company-description">
+          Revolutionizing healthcare queue management. Skip the wait, join the queue online, and get notified when it's your turn.
+        </p>
+        <div class="certification-badges">
+          <span class="badge">HIPAA Compliant</span>
+          <span class="badge">Secure</span>
+          <span class="badge">24/7 Support</span>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-section">
+        <h3 class="footer-title">Quick Links</h3>
+        <ul class="footer-links">
+          <li><a routerLink="/public">Home</a></li>
+          <li><a routerLink="/public/clinics">Find a Clinic</a></li>
+          <li><a routerLink="/public/track">Track Queue</a></li>
+          <li><a routerLink="/public/appointments">Book Appointment</a></li>
+          <li><a routerLink="/public/contact">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- For Patients -->
+      <div class="footer-section">
+        <h3 class="footer-title">For Patients</h3>
+        <ul class="footer-links">
+          <li><a routerLink="/how-it-works">How It Works</a></li>
+          <li><a routerLink="/faq">FAQ</a></li>
+          <li><a routerLink="/privacy">Privacy Policy</a></li>
+          <li><a routerLink="/terms">Terms of Service</a></li>
+          <li><a routerLink="/support">Support</a></li>
+        </ul>
+      </div>
+
+      <!-- For Clinics -->
+      <div class="footer-section">
+        <h3 class="footer-title">For Clinics</h3>
+        <ul class="footer-links">
+          <li><a routerLink="/clinic-signup">Partner With Us</a></li>
+          <li><a routerLink="/clinic-login">Clinic Login</a></li>
+          <li><a routerLink="/pricing">Pricing</a></li>
+          <li><a routerLink="/resources">Resources</a></li>
+          <li><a routerLink="/contact-sales">Contact Sales</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact & Social -->
+      <div class="footer-section contact-section">
+        <h3 class="footer-title">Get In Touch</h3>
+        <div class="contact-info">
+          <div class="contact-item">
+            <mat-icon>location_on</mat-icon>
+            <span>123 Healthcare Ave, Medical District, NY 10001</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>phone</mat-icon>
+            <span>+1 (800) 123-4567</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>email</mat-icon>
+            <span>support@queueless.com</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>schedule</mat-icon>
+            <span>24/7 Support Available</span>
+          </div>
+        </div>
+
+        <!-- Social Media Links -->
+        <div class="social-links">
+          <h4 class="social-title">Follow Us</h4>
+          <div class="social-icons">
+            <a href="#" class="social-icon" matTooltip="Facebook" aria-label="Facebook">
+              <img src="assets/social/facebook.svg" alt="Facebook">
+            </a>
+            <a href="#" class="social-icon" matTooltip="Twitter" aria-label="Twitter">
+              <img src="assets/social/twitter.svg" alt="Twitter">
+            </a>
+            <a href="#" class="social-icon" matTooltip="LinkedIn" aria-label="LinkedIn">
+              <img src="assets/social/linkedin.svg" alt="LinkedIn">
+            </a>
+            <a href="#" class="social-icon" matTooltip="Instagram" aria-label="Instagram">
+              <img src="assets/social/instagram.svg" alt="Instagram">
+            </a>
+            <a href="#" class="social-icon" matTooltip="YouTube" aria-label="YouTube">
+              <img src="assets/social/youtube.svg" alt="YouTube">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Bottom Section -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <div class="copyright">
+          <p>© {{ currentYear }} QueueLess Clinic. All rights reserved. | Made with <mat-icon class="heart-icon">favorite</mat-icon> for better healthcare</p>
+        </div>
+        <div class="footer-bottom-links">
+          <a routerLink="/privacy">Privacy</a>
+          <span class="separator">|</span>
+          <a routerLink="/terms">Terms</a>
+          <span class="separator">|</span>
+          <a routerLink="/cookies">Cookies</a>
+          <span class="separator">|</span>
+          <a routerLink="/accessibility">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- My Tickets Menu -->
+<mat-menu #myTicketsMenu="matMenu" class="compact-notification-menu-panel" xPosition="before">
+  <div class="notif-header">
+    <span class="notif-title">My Tickets</span>
+    <span class="notif-count">{{ recentTickets.length }}</span>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="notif-list" *ngIf="recentTickets.length; else noTicketsTpl">
+    <div class="notif-item" *ngFor="let ticket of recentTickets; trackBy: trackByTicketId">
+      <div class="notif-icon queue">
+        <mat-icon>confirmation_number</mat-icon>
+      </div>
+      <div class="notif-content" (click)="openTicket(ticket)">
+        <div class="notif-text">
+          <span class="notif-title">{{ ticket.ticketNumber }}</span>
+          <span class="notif-time">{{ ticket.savedAt | date:'shortTime' }}</span>
+        </div>
+        <span class="notif-sub">{{ ticket.clinicName || 'Clinic' }} • {{ ticket.status || 'ACTIVE' }}</span>
+      </div>
+      <button mat-icon-button class="ticket-remove-btn" (click)="removeTicket(ticket)" aria-label="Remove ticket">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="notif-footer">
+    <button mat-button class="mark-read-btn" (click)="clearRecentTickets()" [disabled]="!recentTickets.length">
+      <mat-icon>delete_sweep</mat-icon>
+      Clear
+    </button>
+    <button mat-button class="view-all-btn" routerLink="/public/track">
+      Track
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+</mat-menu>
+
+<ng-template #noTicketsTpl>
+  <div class="notification-empty-state">
+    <mat-icon>confirmation_number</mat-icon>
+    <p>No recent tickets yet.</p>
+    <button mat-flat-button color="primary" routerLink="/public/track">Track a ticket</button>
+  </div>
+</ng-template>
+
+<!-- User Menu Template -->
+<mat-menu #userMenu="matMenu" class="user-menu-panel">
+  <button mat-menu-item routerLink="/staff">
+    <mat-icon>badge</mat-icon>
+    <span>Staff Dashboard</span>
+  </button>
+  <button mat-menu-item routerLink="/admin">
+    <mat-icon>admin_panel_settings</mat-icon>
+    <span>Admin Dashboard</span>
+  </button>
+</mat-menu>

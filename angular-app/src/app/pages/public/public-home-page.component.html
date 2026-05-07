@@ -1,0 +1,190 @@
+<!-- Hero Section with Modern Design -->
+<section class="hero-section">
+  <div class="hero-content">
+    <span class="badge">Queue Management System</span>
+    <h1 class="hero-title">
+      Skip the Wait,<br />
+      <span class="highlight">Join the Queue Online</span>
+    </h1>
+    <p class="hero-description">
+      Experience seamless clinic visits with real-time queue tracking. 
+      Choose your clinic, join remotely, and arrive exactly when it's your turn.
+    </p>
+    
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-number">+500</span>
+        <span class="stat-label">Happy Patients</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ heroStats.partner_clinics }}</span>
+        <span class="stat-label">Partner Clinics</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ heroStats.open_queues }}</span>
+        <span class="stat-label">Open Queues</span>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <button mat-raised-button color="primary" class="cta-button" routerLink="/public/track">
+        <mat-icon>search</mat-icon>
+        Track My Ticket
+      </button>
+      <button mat-stroked-button class="learn-more-btn" (click)="scrollToClinics()">
+        <mat-icon>arrow_downward</mat-icon>
+        Explore Clinics
+      </button>
+    </div>
+  </div>
+  
+  <div class="hero-image">
+    <div class="floating-cards-cluster">
+      <div class="floating-card appointment-card">
+        <mat-icon class="card-icon">event_available</mat-icon>
+        <div class="card-content">
+          <span class="card-label">Next Available</span>
+          <span class="card-value">{{ heroStats.next_available_time }}</span>
+        </div>
+      </div>
+      <div class="floating-card queue-card">
+        <mat-icon class="card-icon">groups</mat-icon>
+        <div class="card-content">
+          <span class="card-label">In Queue</span>
+          <span class="card-value">{{ heroStats.in_queue }} people</span>
+        </div>
+      </div>
+      <div class="floating-card serving-card">
+        <mat-icon class="card-icon">medical_services</mat-icon>
+        <div class="card-content">
+          <span class="card-label">Serving Now</span>
+          <span class="card-value">{{ heroStats.serving_now }}</span>
+        </div>
+      </div>
+      <div class="floating-card open-card">
+        <mat-icon class="card-icon">fact_check</mat-icon>
+        <div class="card-content">
+          <span class="card-label">Open Queues</span>
+          <span class="card-value">{{ heroStats.open_queues }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search and Filter Section -->
+<section class="search-section" *ngIf="!loading">
+  <div class="search-container">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search clinics by name or location</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="e.g., City Medical Center">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    
+    <div class="filter-chips">
+      <mat-chip-listbox aria-label="Clinic type filter" (change)="filterByType($event)">
+        <mat-chip-option selected>All Clinics</mat-chip-option>
+        <mat-chip-option>General</mat-chip-option>
+        <mat-chip-option>Dental</mat-chip-option>
+        <mat-chip-option>Pediatric</mat-chip-option>
+        <mat-chip-option>Cardiology</mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+  </div>
+</section>
+
+<!-- Clinics Grid Section -->
+<section class="clinics-section" *ngIf="!loading; else loadingTpl">
+  <div class="section-header">
+    <h2 class="section-title">Available Clinics Near You</h2>
+    <span class="clinic-count">{{ filteredClinics.length }} clinics available</span>
+  </div>
+  
+  <div class="grid-container" *ngIf="filteredClinics.length; else emptyTpl">
+    <mat-card class="clinic-card" *ngFor="let clinic of filteredClinics; trackBy: trackByClinicId">
+      <div class="card-status" [class.active]="clinic.isOpenNow">
+        <span class="status-dot"></span>
+        {{ clinic.isOpenNow ? 'Open Now' : 'Closed' }}
+      </div>
+      
+      <div class="clinic-icon">
+        <mat-icon>{{ getClinicIcon(clinic.type) }}</mat-icon>
+      </div>
+      
+      <mat-card-header>
+        <mat-card-title>{{ clinic.name }}</mat-card-title>
+        <mat-card-subtitle>
+          <mat-icon>location_on</mat-icon>
+          {{ clinic.city }}, {{ clinic.state }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="clinic-details">
+          <div class="detail-item">
+            <mat-icon>phone</mat-icon>
+            <span>{{ clinic.phone }}</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ clinic.hours || '8:00 AM - 8:00 PM' }}</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>people</mat-icon>
+            <span>{{ clinic.waitingCount || 0 }} waiting</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>timer</mat-icon>
+            <span>{{ clinic.avgWaitTime || '10-15' }} min wait</span>
+          </div>
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions class="card-actions">
+        <button mat-raised-button color="primary" class="join-btn"
+                [routerLink]="['/public/join', clinic.slug || clinic.id]">
+          <mat-icon>add</mat-icon>
+          Join Queue
+        </button>
+        <button mat-button class="view-btn"
+                [routerLink]="['/public/board', clinic.slug || clinic.id]">
+          View Board
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</section>
+
+<!-- Loading Template -->
+<ng-template #loadingTpl>
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Finding clinics near you...</p>
+  </div>
+</ng-template>
+
+<!-- Empty Template -->
+<ng-template #emptyTpl>
+  <div class="empty-state">
+    <mat-icon class="empty-icon">local_hospital</mat-icon>
+    <h3>No Clinics Available</h3>
+    <p>There are no active clinics in your area at the moment.</p>
+    <button mat-stroked-button color="primary" (click)="refreshClinics()">
+      <mat-icon>refresh</mat-icon>
+      Refresh
+    </button>
+  </div>
+</ng-template>
+
+<!-- Quick Actions Floating Button -->
+<div class="quick-actions" *ngIf="showQuickActions">
+  <button mat-fab color="primary" class="quick-action-btn" matTooltip="Find nearest clinic" 
+          (click)="findNearestClinic()">
+    <mat-icon>near_me</mat-icon>
+  </button>
+  <button mat-fab class="quick-action-btn" matTooltip="Call for help" 
+          (click)="openHelp()">
+    <mat-icon>support_agent</mat-icon>
+  </button>
+</div>

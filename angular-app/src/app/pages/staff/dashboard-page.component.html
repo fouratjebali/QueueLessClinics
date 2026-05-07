@@ -1,0 +1,140 @@
+<div class="dashboard-container">
+  <div class="page-head">
+    <div>
+      <h2>Staff Dashboard</h2>
+      <p *ngIf="clinic">{{ clinic.name }} - Queue date: {{ selectedDate }}</p>
+    </div>
+    <div class="head-actions">
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>Date</mat-label>
+        <input matInput type="date" [(ngModel)]="selectedDate" (change)="onDateChange()" />
+      </mat-form-field>
+      <button mat-stroked-button color="primary" (click)="openQueue()" [disabled]="!isSelectedDateToday()">Open Queue</button>
+      <button mat-stroked-button color="warn" (click)="closeQueue()" [disabled]="!isSelectedDateToday() || !currentQueue || !currentQueue.is_active">Close Queue</button>
+      <button mat-raised-button color="primary" (click)="openWalkinModal()" [disabled]="!isSelectedDateToday()">Add Walk-in</button>
+      <button mat-stroked-button (click)="loadData()">Refresh</button>
+    </div>
+  </div>
+
+  <p class="hint-message" *ngIf="!isSelectedDateToday()">Viewing historical queue data. Ticket actions are disabled.</p>
+
+  <p class="info-message" *ngIf="infoMessage">{{ infoMessage }}</p>
+  <p class="error-message" *ngIf="actionError">{{ actionError }}</p>
+
+  <div class="kpi-grid">
+    <app-kpi-card title="Waiting (today)" [value]="metrics.waiting"></app-kpi-card>
+    <app-kpi-card title="Avg wait (min)" [value]="metrics.avgWait"></app-kpi-card>
+    <app-kpi-card title="Done (today)" [value]="metrics.done"></app-kpi-card>
+    <app-kpi-card title="No-shows (today)" [value]="metrics.noShow"></app-kpi-card>
+  </div>
+
+  <div class="ops-panels" *ngIf="!loading">
+    <section class="call-next">
+      <h3>Call Next</h3>
+      <div class="next-ticket" *ngIf="nextTicket; else noNextTicket">
+        <p class="ticket-main">{{ nextTicket.ticket_number }} - {{ nextTicket.patient_name }}</p>
+        <p>Service: {{ nextTicket.service_name || '-' }}</p>
+        <p>Wait: {{ nextTicket.estimated_wait_time }} min</p>
+      </div>
+      <ng-template #noNextTicket>
+        <p>No waiting ticket right now.</p>
+      </ng-template>
+      <button mat-raised-button color="accent" (click)="callNext()" [disabled]="!isSelectedDateToday() || !nextTicket">Call Next</button>
+    </section>
+
+    <section class="serving">
+      <h3>Currently Serving</h3>
+      <div *ngIf="servingTicket; else noServing">
+        <p class="ticket-main">{{ servingTicket.ticket_number }} - {{ servingTicket.patient_name }}</p>
+        <p>Service: {{ servingTicket.service_name || '-' }}</p>
+      </div>
+      <ng-template #noServing>
+        <p>No ticket is serving currently.</p>
+      </ng-template>
+    </section>
+  </div>
+
+  <section class="table-filters" *ngIf="!loading">
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="filterStatus" (selectionChange)="applyFilters()">
+        <mat-option value="">All</mat-option>
+        <mat-option value="WAITING">WAITING</mat-option>
+        <mat-option value="CALLED">CALLED</mat-option>
+        <mat-option value="SERVING">SERVING</mat-option>
+        <mat-option value="COMPLETED">COMPLETED</mat-option>
+        <mat-option value="CANCELLED">CANCELLED</mat-option>
+        <mat-option value="NO_SHOW">NO_SHOW</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Service</mat-label>
+      <mat-select [(ngModel)]="filterService" (selectionChange)="applyFilters()">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let service of services" [value]="service.id">{{ service.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="search" (input)="applyFilters()" placeholder="Ticket, name, phone" />
+    </mat-form-field>
+  </section>
+
+  <section class="queue-table" *ngIf="!loading">
+    <h3>Queue Tickets</h3>
+    <table mat-table [dataSource]="filteredTickets" class="mat-elevation-z1">
+      <ng-container matColumnDef="ticket">
+        <th mat-header-cell *matHeaderCellDef>Ticket</th>
+        <td mat-cell *matCellDef="let t">{{ t.ticket_number }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="patient">
+        <th mat-header-cell *matHeaderCellDef>Patient</th>
+        <td mat-cell *matCellDef="let t">{{ t.patient_name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="service">
+        <th mat-header-cell *matHeaderCellDef>Service</th>
+        <td mat-cell *matCellDef="let t">{{ t.service_name || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="wait">
+        <th mat-header-cell *matHeaderCellDef>Wait</th>
+        <td mat-cell *matCellDef="let t">{{ t.estimated_wait_time }}m</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let t">{{ t.status }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="priority">
+        <th mat-header-cell *matHeaderCellDef>Priority</th>
+        <td mat-cell *matCellDef="let t">{{ t.priority }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let t" class="actions-cell">
+          <button mat-button color="primary" (click)="callTicket(t)" [disabled]="!isSelectedDateToday() || isBusy(t.id) || t.status !== 'WAITING'">Call</button>
+          <button mat-button color="primary" (click)="markServing(t)" [disabled]="!isSelectedDateToday() || isBusy(t.id) || (t.status !== 'WAITING' && t.status !== 'CALLED')">Start</button>
+          <button mat-button color="accent" (click)="completeTicket(t)" [disabled]="!isSelectedDateToday() || isBusy(t.id) || t.status !== 'SERVING'">Complete</button>
+          <button mat-button color="warn" (click)="cancelTicket(t)" [disabled]="!isSelectedDateToday() || isBusy(t.id) || t.status === 'COMPLETED' || t.status === 'CANCELLED'">Cancel</button>
+          <button mat-button (click)="markNoShow(t)" [disabled]="!isSelectedDateToday() || isBusy(t.id) || t.status !== 'CALLED'">No-show</button>
+          <button mat-icon-button (click)="moveUp(t)" [disabled]="!isSelectedDateToday() || isBusy(t.id) || !canMoveUp(t)"><mat-icon>arrow_upward</mat-icon></button>
+          <button mat-icon-button (click)="moveDown(t)" [disabled]="!isSelectedDateToday() || isBusy(t.id) || !canMoveDown(t)"><mat-icon>arrow_downward</mat-icon></button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <div *ngIf="!filteredTickets.length" class="empty-row">No tickets found for current filters.</div>
+  </section>
+
+  <section *ngIf="loading" class="loading-block">
+    <p>Loading live operations...</p>
+  </section>
+</div>

@@ -1,0 +1,14 @@
+.mat-toolbar a {
+  color: #fff;
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+.mat-toolbar a:hover {
+  text-decoration: underline;
+}
+
+/* Push navigation links to the right */
+.spacer {
+  flex: 1 1 auto;
+}
