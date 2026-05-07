@@ -1,0 +1,101 @@
+.status-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 2rem auto;
+}
+
+.ticket-card {
+  padding: 1rem;
+}
+
+.ticket-number {
+  font-size: 2.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.status-row {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 0 1rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  &.waiting {
+    background: #ffe082;
+    color: #5d4037;
+  }
+  &.serving {
+    background: #80d8ff;
+    color: #01579b;
+  }
+  &.completed {
+    background: #c5e1a5;
+    color: #33691e;
+  }
+  &.cancelled,
+  &.no_show {
+    background: #ef9a9a;
+    color: #b71c1c;
+  }
+}
+
+.position-display {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.position-value {
+  font-size: 4rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.position-label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.progress {
+  margin: 1rem 0;
+}
+
+.queue-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.patient-details {
+  margin: 0.5rem 0;
+  p {
+    margin: 0.25rem 0;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  button {
+    flex: 1;
+    margin-right: 0.5rem;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.auto-refresh {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: #777;
+  text-align: center;
+}
