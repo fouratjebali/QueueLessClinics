@@ -1,0 +1,13 @@
+.service-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .full-width {
+    flex: 1 1 100%;
+  }
+
+  .half-width {
+    flex: 1 1 calc(50% - 0.5rem);
+  }
+}

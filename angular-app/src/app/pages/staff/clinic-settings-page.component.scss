@@ -1,0 +1,62 @@
+.settings-container {
+  padding: 1rem;
+}
+
+.hint {
+  margin: 0.25rem 0 0.75rem;
+  color: #4b5563;
+}
+
+.info-message {
+  margin: 0 0 0.75rem;
+  color: #0f5132;
+  background: #d1e7dd;
+  border: 1px solid #badbcc;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.error-message {
+  margin: 0 0 0.75rem;
+  color: #842029;
+  background: #f8d7da;
+  border: 1px solid #f5c2c7;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.tab-pane {
+  padding-top: 1rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.toggles {
+  margin-bottom: 0.75rem;
+}
+
+.hours-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.hour-row {
+  display: grid;
+  grid-template-columns: 100px 100px 1fr 1fr;
+  gap: 0.75rem;
+  align-items: center;
+
+  .day-name {
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+}

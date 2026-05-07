@@ -1,0 +1,139 @@
+<div class="settings-container" *ngIf="!loading && clinic; else loadingTpl">
+  <h2>Clinic Settings</h2>
+  <p class="hint">Clinic: {{ clinic.name }}</p>
+  <p class="info-message" *ngIf="infoMessage">{{ infoMessage }}</p>
+  <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <mat-tab-group>
+    <mat-tab label="General">
+      <div class="tab-pane">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="clinic.name" [disabled]="!canEdit" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Street</mat-label>
+          <input matInput [(ngModel)]="clinic.street" [disabled]="!canEdit" />
+        </mat-form-field>
+
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <input matInput [(ngModel)]="clinic.city" [disabled]="!canEdit" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>State</mat-label>
+            <input matInput [(ngModel)]="clinic.state" [disabled]="!canEdit" />
+          </mat-form-field>
+        </div>
+
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput [(ngModel)]="clinic.phone" [disabled]="!canEdit" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="clinic.email" [disabled]="!canEdit" />
+          </mat-form-field>
+        </div>
+
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Primary color</mat-label>
+            <input matInput [(ngModel)]="clinic.primary_color" [disabled]="!canEdit" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Secondary color</mat-label>
+            <input matInput [(ngModel)]="clinic.secondary_color" [disabled]="!canEdit" />
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" (click)="saveGeneral()" [disabled]="!canEdit">Save General</button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Hours">
+      <div class="tab-pane">
+        <div class="hours-grid" *ngIf="settings.operating_hours">
+          <div class="hour-row" *ngFor="let day of dayOrder">
+            <span class="day-name">{{ day }}</span>
+            <mat-checkbox [(ngModel)]="settings.operating_hours[day].isOpen" [disabled]="!canEdit">Open</mat-checkbox>
+            <mat-form-field appearance="outline">
+              <mat-label>Open</mat-label>
+              <input matInput [(ngModel)]="settings.operating_hours[day].openTime" [disabled]="!canEdit || !settings.operating_hours[day].isOpen" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Close</mat-label>
+              <input matInput [(ngModel)]="settings.operating_hours[day].closeTime" [disabled]="!canEdit || !settings.operating_hours[day].isOpen" />
+            </mat-form-field>
+          </div>
+        </div>
+        <button mat-raised-button color="primary" (click)="saveHours()" [disabled]="!canEdit">Save Hours</button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Queue rules">
+      <div class="tab-pane">
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Max capacity</mat-label>
+            <input matInput type="number" [(ngModel)]="settings.max_capacity" [disabled]="!canEdit" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Estimated service time (min)</mat-label>
+            <input matInput type="number" [(ngModel)]="settings.estimated_service_time" [disabled]="!canEdit" />
+          </mat-form-field>
+        </div>
+
+        <div class="row toggles">
+          <mat-checkbox [(ngModel)]="settings.allow_walkins" [disabled]="!canEdit">Allow walk-ins</mat-checkbox>
+          <mat-checkbox [(ngModel)]="settings.allow_online_joining" [disabled]="!canEdit">Allow online joining</mat-checkbox>
+          <mat-checkbox [(ngModel)]="settings.auto_call_next" [disabled]="!canEdit">Auto call next</mat-checkbox>
+        </div>
+
+        <button mat-raised-button color="primary" (click)="saveQueueRules()" [disabled]="!canEdit">Save Queue Rules</button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Notifications">
+      <div class="tab-pane">
+        <div class="row toggles">
+          <mat-checkbox [(ngModel)]="settings.enable_sms" [disabled]="!canEdit">Enable SMS</mat-checkbox>
+          <mat-checkbox [(ngModel)]="settings.enable_email" [disabled]="!canEdit">Enable Email</mat-checkbox>
+          <mat-checkbox [(ngModel)]="settings.ready_notification" [disabled]="!canEdit">Ready notification</mat-checkbox>
+          <mat-checkbox [(ngModel)]="settings.missed_turn_notification" [disabled]="!canEdit">Missed-turn notification</mat-checkbox>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Reminder before minutes</mat-label>
+          <input matInput type="number" [(ngModel)]="settings.reminder_before_minutes" [disabled]="!canEdit" />
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="saveNotifications()" [disabled]="!canEdit">Save Notifications</button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Display">
+      <div class="tab-pane">
+        <div class="row toggles">
+          <mat-checkbox [(ngModel)]="settings.show_estimated_wait_time" [disabled]="!canEdit">Show estimated wait</mat-checkbox>
+          <mat-checkbox [(ngModel)]="settings.show_queue_position" [disabled]="!canEdit">Show queue position</mat-checkbox>
+          <mat-checkbox [(ngModel)]="settings.show_people_ahead" [disabled]="!canEdit">Show people ahead</mat-checkbox>
+        </div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Welcome message</mat-label>
+          <textarea matInput rows="3" [(ngModel)]="settings.custom_welcome_message" [disabled]="!canEdit"></textarea>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="saveDisplay()" [disabled]="!canEdit">Save Display</button>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="settings-container">
+    <h2>Clinic Settings</h2>
+    <p *ngIf="loading">Loading settings...</p>
+    <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+  </div>
+</ng-template>
