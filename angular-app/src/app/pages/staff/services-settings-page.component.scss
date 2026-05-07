@@ -1,0 +1,43 @@
+.services-settings {
+  padding: 1rem;
+}
+
+.head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.head-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.error-message {
+  margin: 0 0 0.75rem;
+  color: #842029;
+  background: #f8d7da;
+  border: 1px solid #f5c2c7;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.services-table {
+  width: 100%;
+
+  th {
+    background: #f7f7f7;
+  }
+
+  .actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+}

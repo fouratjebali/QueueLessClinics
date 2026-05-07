@@ -1,0 +1,70 @@
+<div class="reports-container">
+  <div class="head-row">
+    <h2>Reports & Analytics</h2>
+    <div class="actions">
+      <button mat-stroked-button color="primary" (click)="exportCsv()">Export CSV</button>
+      <button mat-stroked-button (click)="exportPdfSummary()">Export PDF</button>
+    </div>
+  </div>
+
+  <div class="filters">
+    <mat-form-field appearance="outline">
+      <mat-label>From</mat-label>
+      <input matInput type="date" [(ngModel)]="fromDate" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>To</mat-label>
+      <input matInput type="date" [(ngModel)]="toDate" />
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="loadReport()">Apply</button>
+  </div>
+
+  <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div *ngIf="!loading">
+    <div class="kpi-grid">
+      <app-kpi-card title="Total patients" [value]="totalPatients"></app-kpi-card>
+      <app-kpi-card title="Avg wait (min)" [value]="avgWait"></app-kpi-card>
+      <app-kpi-card title="Avg service (min)" [value]="avgService"></app-kpi-card>
+      <app-kpi-card title="No-show %" [value]="noShowRate + '%' "></app-kpi-card>
+    </div>
+
+    <div class="charts-grid">
+      <section class="chart-card">
+        <h3>Arrivals per hour</h3>
+        <div class="bar-row" *ngFor="let d of hourlyData">
+          <span class="label">{{ d.hour }}</span>
+          <div class="bar-track">
+            <div class="bar-fill" [style.width.%]="totalPatients ? (d.count / totalPatients) * 100 : 0"></div>
+          </div>
+          <span class="value">{{ d.count }}</span>
+        </div>
+        <p *ngIf="!hourlyData.length">No arrivals in selected range.</p>
+      </section>
+
+      <section class="chart-card">
+        <h3>Status distribution</h3>
+        <div class="status-list" *ngFor="let s of statusDist">
+          <span class="dot" [style.background]="s.color"></span>
+          <span class="status">{{ s.status }}</span>
+          <span class="count">{{ s.count }}</span>
+        </div>
+        <p *ngIf="!statusDist.length">No status data for selected range.</p>
+      </section>
+
+      <section class="chart-card">
+        <h3>Wait-time trend</h3>
+        <div class="bar-row" *ngFor="let p of waitTrend">
+          <span class="label">{{ p.day }}</span>
+          <div class="bar-track">
+            <div class="bar-fill trend" [style.width.%]="avgWait ? (p.avg / (avgWait * 2)) * 100 : 0"></div>
+          </div>
+          <span class="value">{{ p.avg }}m</span>
+        </div>
+        <p *ngIf="!waitTrend.length">No wait trend data.</p>
+      </section>
+    </div>
+  </div>
+
+  <p *ngIf="loading">Loading reports...</p>
+</div>
