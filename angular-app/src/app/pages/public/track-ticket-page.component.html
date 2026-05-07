@@ -1,0 +1,23 @@
+<div class="track-container">
+  <mat-card class="track-card">
+    <mat-card-title>Suivre Votre Ticket</mat-card-title>
+    <mat-card-content>
+      <p>Entrez vos informations pour suivre votre position dans la file</p>
+      <form [formGroup]="trackForm" (ngSubmit)="track()" class="track-form">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Numéro de ticket</mat-label>
+          <input matInput formControlName="ticketNumber" placeholder="ex: A047" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Numéro de téléphone</mat-label>
+          <input matInput formControlName="phone" required>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit" [disabled]="trackForm.invalid">Suivre Mon Ticket</button>
+        <p class="error" *ngIf="error">{{ error }}</p>
+      </form>
+      <div class="join-link">
+        Pas encore de ticket? <a routerLink="/public">Rejoindre la file →</a>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

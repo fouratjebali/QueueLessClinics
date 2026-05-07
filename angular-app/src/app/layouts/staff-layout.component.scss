@@ -1,0 +1,249 @@
+﻿:host {
+  --staff-primary: #0f766e;
+  --staff-primary-dark: #0b5f59;
+  --staff-ink: #0f172a;
+  --staff-subtle: #64748b;
+  --staff-surface: #f7f9fc;
+  --staff-card: #ffffff;
+  --staff-border: #e2e8f0;
+  --staff-active: #e5f8f5;
+}
+
+.sidenav-container {
+  height: 100vh;
+  background: var(--staff-surface);
+}
+
+.staff-sidenav {
+  width: 276px;
+  background: var(--staff-card);
+  border-right: 1px solid var(--staff-border);
+}
+
+.sidenav-header {
+  padding: 1rem 1rem 0.9rem;
+  border-bottom: 1px solid var(--staff-border);
+  background: linear-gradient(160deg, #ffffff 0%, #f4fbfa 100%);
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.logo-text {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--staff-ink);
+}
+
+.highlight {
+  color: var(--staff-primary);
+}
+
+.staff-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--staff-primary), var(--staff-primary-dark));
+  color: #fff;
+  letter-spacing: 0.4px;
+}
+
+.brand-subtitle {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--staff-subtle);
+}
+
+.nav-list {
+  padding: 0.8rem;
+}
+
+.menu-group-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0.1rem 0 0.45rem 0.4rem;
+}
+
+.nav-list a[mat-list-item] {
+  height: 44px;
+  border-radius: 10px;
+  margin-bottom: 0.25rem;
+  color: #334155;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.nav-list a[mat-list-item] .mat-icon {
+  color: #6b7280;
+  margin-right: 0.75rem;
+}
+
+.nav-list a[mat-list-item]:hover {
+  background: #f1f5f9;
+  color: var(--staff-primary);
+}
+
+.nav-list a[mat-list-item]:hover .mat-icon {
+  color: var(--staff-primary);
+}
+
+.nav-list a[mat-list-item].active {
+  background: var(--staff-active);
+  color: var(--staff-primary-dark);
+  font-weight: 600;
+}
+
+.nav-list a[mat-list-item].active .mat-icon {
+  color: var(--staff-primary);
+}
+
+.nav-divider {
+  margin: 0.75rem 0;
+}
+
+.logout-item {
+  color: #dc2626 !important;
+}
+
+.logout-item .mat-icon {
+  color: #dc2626 !important;
+}
+
+.main-content {
+  background: var(--staff-surface);
+}
+
+.staff-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 68px;
+  border-bottom: 1px solid var(--staff-border);
+  background: #fff;
+  padding: 0 1.05rem;
+}
+
+.menu-toggle {
+  margin-right: 0.35rem;
+}
+
+.toolbar-title-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.title {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--staff-ink);
+}
+
+.subtitle {
+  font-size: 0.74rem;
+  color: #64748b;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.user-menu-btn {
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--staff-border);
+  padding: 0 0.55rem 0 0.45rem;
+  background: #fff;
+  line-height: 1;
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--staff-primary), var(--staff-primary-dark));
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.45rem;
+}
+
+.user-meta {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 0.3rem;
+}
+
+.user-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.user-role {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+.staff-content {
+  padding: 1.35rem;
+  min-height: calc(100vh - 68px);
+}
+
+.menu-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 0.85rem 0.6rem;
+}
+
+.menu-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--staff-primary), var(--staff-primary-dark));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-user-name {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.menu-user-role {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .staff-sidenav {
+    width: 248px;
+  }
+
+  .user-meta {
+    display: none;
+  }
+}
+
+::ng-deep .user-menu .mat-mdc-menu-content,
+::ng-deep .user-menu .mat-menu-content {
+  padding-top: 0;
+}
