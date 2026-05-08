@@ -1,6 +1,6 @@
 <div class="board" *ngIf="clinic; else loadingTemplate">
   <header class="board-header">
-    <div class="clinic-name">{{ clinic?.name }}</div>
+    <div class="clinic-name">{{ clinic.name }}</div>
     <div class="clock">{{ time | date:'HH:mm:ss' }}</div>
   </header>
   <section class="current">

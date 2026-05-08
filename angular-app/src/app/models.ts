@@ -12,6 +12,7 @@ export interface Clinic {
   longitude?: number;
   phone: string;
   email: string;
+  timezone?: string;
   website?: string;
   fax?: string;
   logo?: string;

@@ -1,8 +1,8 @@
 <div class="join-container" *ngIf="clinic; else loadingTemplate">
   <mat-card class="clinic-card">
     <mat-card-header>
-      <mat-card-title>{{ clinic?.name }}</mat-card-title>
-      <mat-card-subtitle>{{ clinic?.street }}, {{ clinic?.city }}</mat-card-subtitle>
+      <mat-card-title>{{ clinic.name }}</mat-card-title>
+      <mat-card-subtitle>{{ clinic.street }}, {{ clinic.city }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <p class="queue-info">

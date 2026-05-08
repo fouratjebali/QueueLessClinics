@@ -1,12 +1,12 @@
 ﻿<div class="status-container" *ngIf="ticket; else loadingTemplate">
   <mat-card class="ticket-card">
     <mat-card-header>
-      <mat-card-title class="ticket-number">{{ ticket?.ticket_number }}</mat-card-title>
-      <mat-card-subtitle>{{ ticket?.joined_at | date:'EEEE d MMM yyyy HH:mm' }}</mat-card-subtitle>
+      <mat-card-title class="ticket-number">{{ ticket.ticket_number }}</mat-card-title>
+      <mat-card-subtitle>{{ ticket.joined_at | date:'EEEE d MMM yyyy HH:mm' }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div class="status-row">
-        <span class="status-badge" [ngClass]="ticket?.status.toLowerCase()">{{ ticket?.status }}</span>
+        <span class="status-badge" [ngClass]="ticket.status.toLowerCase()">{{ ticket.status }}</span>
       </div>
       <div class="position-display">
         <div class="position-value">{{ position }}</div>
@@ -19,13 +19,13 @@
         <span>Attente&nbsp;: ~{{ estimatedWait }} min</span>
       </div>
       <div class="patient-details">
-        <p><strong>{{ ticket?.patient_name }}</strong></p>
-        <p>{{ ticket?.patient_phone }}</p>
-        <p>Service: {{ ticket?.service_name || '—' }}</p>
+        <p><strong>{{ ticket.patient_name }}</strong></p>
+        <p>{{ ticket.patient_phone }}</p>
+        <p>Service: {{ ticket.service_name || '—' }}</p>
       </div>
       <div class="actions">
-        <button mat-stroked-button color="warn" (click)="cancelTicket()" *ngIf="ticket?.status === 'WAITING'">Annuler Ticket</button>
-        <button mat-stroked-button (click)="loadStatus(ticket?.id!)">Actualiser</button>
+        <button mat-stroked-button color="warn" (click)="cancelTicket()" *ngIf="ticket.status === 'WAITING'">Annuler Ticket</button>
+        <button mat-stroked-button (click)="loadStatus(ticket.id)">Actualiser</button>
       </div>
       <p class="auto-refresh">Auto-actualisation toutes les 30s</p>
     </mat-card-content>
