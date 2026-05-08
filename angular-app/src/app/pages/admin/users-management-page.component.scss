@@ -1,0 +1,74 @@
+.users-page {
+  padding: 1rem;
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  .header-actions {
+    margin-bottom: 1rem;
+  }
+
+  .creation-form {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    background: #fafafa;
+
+    h3 {
+      margin: 0 0 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .creation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .form-actions {
+      margin-top: 0.5rem;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .form-error {
+      margin: 0;
+      color: #b00020;
+      font-size: 0.9rem;
+    }
+  }
+
+  .info-message {
+    margin: 0 0 1rem;
+    color: #0f5132;
+    background: #d1e7dd;
+    border: 1px solid #badbcc;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    align-items: end;
+  }
+
+  .users-table {
+    width: 100%;
+
+    th {
+      background: #f7f7f7;
+    }
+
+    .actions-cell {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
