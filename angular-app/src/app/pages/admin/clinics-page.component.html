@@ -1,0 +1,174 @@
+<div class="clinics-page">
+  <h2>Gestion des Cliniques</h2>
+  <div class="header-actions">
+    <button mat-raised-button color="primary" (click)="openAddClinicForm()">+ Nouvelle Clinique</button>
+    <button mat-stroked-button color="primary" (click)="openQuickStaffForm()">+ Quick staff user</button>
+  </div>
+
+  <form class="creation-form" *ngIf="showAddClinicForm" (ngSubmit)="submitAddClinic()">
+    <h3>Nouvelle Clinique</h3>
+    <div class="creation-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Nom de la clinique</mat-label>
+        <input matInput [(ngModel)]="newClinic.name" name="newClinicName" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Ville</mat-label>
+        <input matInput [(ngModel)]="newClinic.city" name="newClinicCity" required />
+      </mat-form-field>
+    </div>
+    <p class="form-error" *ngIf="addClinicError">{{ addClinicError }}</p>
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="isSubmittingClinic || !newClinic.name.trim() || !newClinic.city.trim()"
+      >
+        Valider
+      </button>
+      <button mat-stroked-button type="button" (click)="cancelAddClinic()" [disabled]="isSubmittingClinic">Annuler</button>
+    </div>
+  </form>
+
+  <form class="creation-form" *ngIf="showQuickStaffForm" (ngSubmit)="submitQuickStaffForm()">
+    <h3>Nouveau Staff</h3>
+    <div class="creation-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="newStaff.email" name="quickStaffEmail" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Prenom</mat-label>
+        <input matInput [(ngModel)]="newStaff.first_name" name="quickStaffFirstName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nom</mat-label>
+        <input matInput [(ngModel)]="newStaff.last_name" name="quickStaffLastName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Clinique (optionnel)</mat-label>
+        <mat-select [(ngModel)]="newStaff.clinic" name="quickStaffClinic">
+          <mat-option value="">Aucune</mat-option>
+          <mat-option *ngFor="let clinic of clinics" [value]="clinic.id">{{ clinic.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <p class="form-error" *ngIf="addStaffError">{{ addStaffError }}</p>
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="isSubmittingStaff || !newStaff.email.trim() || !newStaff.first_name.trim() || !newStaff.last_name.trim()"
+      >
+        Valider
+      </button>
+      <button mat-stroked-button type="button" (click)="cancelQuickStaffForm()" [disabled]="isSubmittingStaff">Annuler</button>
+    </div>
+  </form>
+
+  <form class="creation-form" *ngIf="showEditClinicForm" (ngSubmit)="submitEditClinic()">
+    <h3>Modifier Clinique</h3>
+    <div class="creation-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Nom de la clinique</mat-label>
+        <input matInput [(ngModel)]="editClinicForm.name" name="editClinicName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Ville</mat-label>
+        <input matInput [(ngModel)]="editClinicForm.city" name="editClinicCity" required />
+      </mat-form-field>
+    </div>
+    <p class="form-error" *ngIf="editClinicError">{{ editClinicError }}</p>
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="isSubmittingEditClinic || !editClinicForm.name.trim() || !editClinicForm.city.trim()"
+      >
+        Valider
+      </button>
+      <button mat-stroked-button type="button" (click)="cancelEditClinic()" [disabled]="isSubmittingEditClinic">Annuler</button>
+    </div>
+  </form>
+
+  <p class="info-message" *ngIf="staffTemporaryPassword">{{ staffTemporaryPassword }}</p>
+
+  <div class="filters">
+    <mat-form-field appearance="outline">
+      <mat-label>Search</mat-label>
+      <input matInput [(ngModel)]="search" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>City</mat-label>
+      <input matInput [(ngModel)]="city" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="isActive">
+        <mat-option value="">All</mat-option>
+        <mat-option value="true">Active</mat-option>
+        <mat-option value="false">Disabled</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="loadClinics()">Apply</button>
+  </div>
+
+  <table mat-table [dataSource]="clinics" class="clinics-table">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Clinique</th>
+      <td mat-cell *matCellDef="let clinic">{{ clinic.name }}</td>
+    </ng-container>
+
+    <!-- City Column -->
+    <ng-container matColumnDef="city">
+      <th mat-header-cell *matHeaderCellDef>Ville</th>
+      <td mat-cell *matCellDef="let clinic">{{ clinic.city }}</td>
+    </ng-container>
+
+    <!-- Active Column -->
+    <ng-container matColumnDef="open">
+      <th mat-header-cell *matHeaderCellDef>Queue</th>
+      <td mat-cell *matCellDef="let clinic">
+        <span [style.color]="clinic.is_open_now ? '#1b5e20' : '#b71c1c'">
+          {{ clinic.is_open_now ? 'Open' : 'Closed' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="stats">
+      <th mat-header-cell *matHeaderCellDef>Stats</th>
+      <td mat-cell *matCellDef="let clinic">
+        <div>Today: {{ clinic.total_tickets_today }}</div>
+        <div>Waiting: {{ clinic.waiting_now }}</div>
+        <div>Avg wait: {{ clinic.avg_wait_time | number:'1.0-0' }} min</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="active">
+      <th mat-header-cell *matHeaderCellDef>Statut</th>
+      <td mat-cell *matCellDef="let clinic">
+        <mat-slide-toggle color="primary" [checked]="clinic.is_active" (change)="toggleActive(clinic)"></mat-slide-toggle>
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let clinic" class="actions-cell">
+        <button mat-icon-button color="primary" (click)="openEditClinicForm(clinic)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="accent" (click)="openDetails(clinic)"><mat-icon>open_in_new</mat-icon></button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

@@ -1,0 +1,57 @@
+<div class="system-settings-page">
+  <h2>System Settings</h2>
+  <form class="settings-form" [formGroup]="settingsForm" (ngSubmit)="save()">
+    <mat-slide-toggle formControlName="maintenance_mode">Maintenance mode</mat-slide-toggle>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Maintenance banner</mat-label>
+      <input matInput formControlName="maintenance_banner" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Data retention days</mat-label>
+      <input matInput type="number" formControlName="data_retention_days" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>SMS template</mat-label>
+      <textarea matInput rows="2" formControlName="sms_template"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email template</mat-label>
+      <textarea matInput rows="2" formControlName="email_template"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Allowed countries (comma separated)</mat-label>
+      <input matInput formControlName="allowed_countries" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Allowed phone formats (comma separated)</mat-label>
+      <input matInput formControlName="allowed_phone_formats" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Twilio config (JSON)</mat-label>
+      <textarea matInput rows="4" formControlName="twilio_config"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>SMTP config (JSON)</mat-label>
+      <textarea matInput rows="4" formControlName="smtp_config"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Default queue rules (JSON)</mat-label>
+      <textarea matInput rows="4" formControlName="default_queue_rules"></textarea>
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="settingsForm.invalid">Save</button>
+      <button mat-stroked-button type="button" (click)="sendTest('EMAIL')">Test email</button>
+      <button mat-stroked-button type="button" (click)="sendTest('SMS')">Test SMS</button>
+    </div>
+  </form>
+</div>

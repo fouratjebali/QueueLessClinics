@@ -1,0 +1,125 @@
+<div class="clinic-detail-page" *ngIf="clinic">
+  <h2>{{ clinic.name }} - Admin</h2>
+
+  <mat-tab-group>
+    <mat-tab label="General">
+      <div class="panel">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="clinic.name" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Slug</mat-label>
+          <input matInput [(ngModel)]="clinic.slug" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="clinic.email" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Phone</mat-label>
+          <input matInput [(ngModel)]="clinic.phone" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Timezone</mat-label>
+          <input matInput [(ngModel)]="clinic.timezone" />
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="saveGeneral()">Save general</button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Branding">
+      <div class="panel">
+        <mat-form-field appearance="outline">
+          <mat-label>Primary color</mat-label>
+          <input matInput [(ngModel)]="clinic.primary_color" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Secondary color</mat-label>
+          <input matInput [(ngModel)]="clinic.secondary_color" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="wide">
+          <mat-label>Logo URL/Base64</mat-label>
+          <textarea matInput rows="2" [(ngModel)]="clinic.logo"></textarea>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="saveBranding()">Save branding</button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Hours">
+      <div class="panel">
+        <p>Paste weekly schedule as JSON</p>
+        <textarea #hoursText class="json-box">{{ clinic.settings?.operating_hours | json }}</textarea>
+        <button mat-raised-button color="primary" (click)="saveHours(hoursText.value)">Save hours</button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Queue Rules">
+      <div class="panel">
+        <mat-form-field appearance="outline">
+          <mat-label>Max capacity</mat-label>
+          <input #maxCapacity matInput type="number" [value]="clinic.settings?.max_capacity || 50" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Estimated service time (min)</mat-label>
+          <input #serviceTime matInput type="number" [value]="clinic.settings?.estimated_service_time || 15" />
+        </mat-form-field>
+        <p>Emergency priority rules (JSON)</p>
+        <textarea #rulesText class="json-box">{{ clinic.settings?.emergency_priority_rules | json }}</textarea>
+        <button mat-raised-button color="primary" (click)="saveRules(maxCapacity.value, serviceTime.value, rulesText.value)">Save queue rules</button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Services">
+      <div class="panel">
+        <button mat-raised-button color="primary" (click)="addService()">Add service</button>
+        <table mat-table [dataSource]="services" class="table">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let s">{{ s.name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef>Duration</th>
+            <td mat-cell *matCellDef="let s">{{ s.estimated_duration }} min</td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let s">
+              <button mat-button (click)="updateService(s)">Edit</button>
+              <button mat-button color="warn" (click)="deleteService(s)">Delete</button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="['name', 'duration', 'actions']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['name', 'duration', 'actions'];"></tr>
+        </table>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Staff Assigned">
+      <div class="panel">
+        <table mat-table [dataSource]="staff" class="table">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let u">{{ u.first_name }} {{ u.last_name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let u">{{ u.email }}</td>
+          </ng-container>
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Role</th>
+            <td mat-cell *matCellDef="let u">{{ u.role }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="['name', 'email', 'role']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['name', 'email', 'role'];"></tr>
+        </table>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Analytics">
+      <div class="panel">
+        <a mat-raised-button color="primary" [routerLink]="['/admin/analytics']">Open clinic analytics</a>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

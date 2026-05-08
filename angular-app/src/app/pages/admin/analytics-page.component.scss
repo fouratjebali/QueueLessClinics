@@ -1,0 +1,412 @@
+// Modern Analytics Page – Enhanced Design
+:host {
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-soft: #eef2ff;
+  --secondary: #10b981;
+  --accent: #8b5cf6;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text-dark: #0f172a;
+  --text-medium: #334155;
+  --text-light: #64748b;
+  --border-light: #e2e8f0;
+  --bg-soft: #f8fafc;
+  --card-white: #ffffff;
+  --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.analytics-page {
+  padding: 2rem;
+  background: linear-gradient(135deg, #f1f5f9 0%, #f8fafc 100%);
+  min-height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+
+  // Page header
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--text-dark), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 0.25rem;
+    letter-spacing: -0.02em;
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
+    }
+  }
+
+  p {
+    color: var(--text-light);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    font-weight: 400;
+    max-width: 600px;
+  }
+
+  // Top action buttons
+  .top-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    button {
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0 1.5rem;
+      line-height: 42px;
+      border: 1px solid var(--border-light);
+      background: var(--card-white);
+      color: var(--text-medium);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      // Add pseudo‑icons via pseudo‑elements to avoid touching HTML
+      &::before {
+        font-family: 'Material Icons';
+        font-size: 1.2rem;
+        line-height: 1;
+      }
+
+      &:first-child::before {
+        content: 'download';
+      }
+
+      &:nth-child(2)::before {
+        content: 'picture_as_pdf';
+      }
+
+      &:hover {
+        background: var(--primary-soft);
+        border-color: var(--primary);
+        color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      &[color="primary"] {
+        background: var(--primary);
+        color: white;
+        border: none;
+
+        &::before {
+          color: white;
+        }
+
+        &:hover {
+          background: #1d4ed8;
+        }
+      }
+
+      &[color="accent"] {
+        background: var(--secondary);
+        color: white;
+        border: none;
+
+        &::before {
+          color: white;
+        }
+
+        &:hover {
+          background: #059669;
+        }
+      }
+    }
+  }
+
+  // Metrics grid (KPI cards)
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+
+    app-kpi-card {
+      display: block;
+      background: var(--card-white);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: var(--transition);
+      padding: 1.5rem 1.25rem;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+        border-color: transparent;
+
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      // Target internal elements (adjust classes based on your actual kpi-card template)
+      .kpi-title {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-light);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .kpi-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        line-height: 1.2;
+      }
+    }
+  }
+
+  // Tables section
+  .tables {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 1.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .panel {
+    background: var(--card-white);
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: var(--transition);
+
+    &:hover {
+      box-shadow: var(--shadow-md);
+      border-color: transparent;
+    }
+
+    h3 {
+      margin: 0;
+      padding: 1.25rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      // Add a small icon using pseudo‑element
+      &::before {
+        font-family: 'Material Icons';
+        font-size: 1.4rem;
+        color: var(--primary);
+        content: 'table_rows'; // default, but we can override per panel if needed (but we cannot change HTML)
+      }
+    }
+
+    // Table styling
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+
+      th.mat-header-cell {
+        background: #fafcff;
+        color: var(--text-medium);
+        font-weight: 600;
+        font-size: 0.85rem;
+        padding: 1rem 1.5rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-light);
+        white-space: nowrap;
+      }
+
+      td.mat-cell {
+        padding: 1rem 1.5rem;
+        color: var(--text-dark);
+        font-size: 0.95rem;
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      tr.mat-row {
+        transition: background-color 0.15s;
+
+        &:hover td.mat-cell {
+          background-color: #fafcff;
+        }
+
+        &:last-child td.mat-cell {
+          border-bottom: none;
+        }
+      }
+
+      // Add subtle zebra striping
+      tr.mat-row:nth-child(even) {
+        background-color: #fcfdff;
+      }
+    }
+  }
+
+  // Bottom filters
+  .bottom-filters {
+    background: var(--card-white);
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    padding: 1.75rem;
+    margin-top: 2rem;
+    transition: var(--transition);
+
+    &:hover {
+      box-shadow: var(--shadow-md);
+      border-color: transparent;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin: 0 0 1.25rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before {
+        font-family: 'Material Icons';
+        content: 'filter_alt';
+        color: var(--primary);
+        font-size: 1.3rem;
+      }
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    mat-form-field {
+      flex: 1 1 200px;
+
+      .mat-form-field-outline {
+        background: white;
+        border-radius: 12px;
+      }
+
+      .mat-form-field-flex {
+        align-items: center;
+      }
+
+      input, .mat-select-value {
+        font-weight: 500;
+        color: var(--text-dark);
+      }
+    }
+
+    button {
+      height: 56px;
+      min-width: 130px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+
+      &[mat-raised-button] {
+        background: var(--primary);
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+
+        &::before {
+          font-family: 'Material Icons';
+          content: 'check';
+          font-size: 1.2rem;
+        }
+
+        &:hover {
+          background: #1d4ed8;
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-md);
+        }
+      }
+
+      &[mat-button] {
+        background: white;
+        color: var(--text-medium);
+        border: 1px solid var(--border-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+
+        &::before {
+          font-family: 'Material Icons';
+          content: 'refresh';
+          font-size: 1.2rem;
+        }
+
+        &:hover {
+          background: var(--primary-soft);
+          border-color: var(--primary);
+          color: var(--primary);
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+}
+
+// Make Material table headers sticky (optional)
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: inherit;
+}
+
+// Improve Material form field appearance globally within this component
+::ng-deep .analytics-page {
+  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    color: var(--primary);
+  }
+
+  .mat-form-field.mat-focused .mat-form-field-label {
+    color: var(--primary);
+  }
+}
