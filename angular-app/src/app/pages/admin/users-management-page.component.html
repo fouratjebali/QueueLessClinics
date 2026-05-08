@@ -1,0 +1,195 @@
+<div class="users-page">
+  <h2>Gestion des Utilisateurs</h2>
+  <div class="header-actions">
+    <button mat-raised-button color="primary" (click)="openAddUserForm()">+ Nouvel Utilisateur</button>
+  </div>
+
+  <form class="creation-form" *ngIf="showAddUserForm" (ngSubmit)="submitAddUser()">
+    <h3>Nouvel Utilisateur</h3>
+    <div class="creation-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="newUser.email" name="newUserEmail" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Prenom</mat-label>
+        <input matInput [(ngModel)]="newUser.first_name" name="newUserFirstName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nom</mat-label>
+        <input matInput [(ngModel)]="newUser.last_name" name="newUserLastName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Role</mat-label>
+        <mat-select [(ngModel)]="newUser.role" name="newUserRole" required>
+          <mat-option *ngFor="let role of roleOptions" [value]="role">{{ role }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Clinique (optionnel)</mat-label>
+        <mat-select [(ngModel)]="newUser.clinic" name="newUserClinic">
+          <mat-option value="">Aucune</mat-option>
+          <mat-option *ngFor="let clinic of clinics" [value]="clinic.id">{{ clinic.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <p class="form-error" *ngIf="addUserError">{{ addUserError }}</p>
+
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="
+          isSubmittingUser ||
+          !newUser.email.trim() ||
+          !newUser.first_name.trim() ||
+          !newUser.last_name.trim() ||
+          !newUser.role
+        "
+      >
+        Valider
+      </button>
+      <button mat-stroked-button type="button" (click)="cancelAddUser()" [disabled]="isSubmittingUser">Annuler</button>
+    </div>
+  </form>
+
+  <form class="creation-form" *ngIf="showEditUserForm" (ngSubmit)="submitEditUser()">
+    <h3>Modifier Utilisateur</h3>
+    <div class="creation-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="editUserForm.email" name="editUserEmail" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Prenom</mat-label>
+        <input matInput [(ngModel)]="editUserForm.first_name" name="editUserFirstName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nom</mat-label>
+        <input matInput [(ngModel)]="editUserForm.last_name" name="editUserLastName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Telephone (optionnel)</mat-label>
+        <input matInput [(ngModel)]="editUserForm.phone_number" name="editUserPhone" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Role</mat-label>
+        <mat-select [(ngModel)]="editUserForm.role" name="editUserRole" required>
+          <mat-option *ngFor="let role of roleOptions" [value]="role">{{ role }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Clinique (optionnel)</mat-label>
+        <mat-select [(ngModel)]="editUserForm.clinic" name="editUserClinic">
+          <mat-option value="">Aucune</mat-option>
+          <mat-option *ngFor="let clinic of clinics" [value]="clinic.id">{{ clinic.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <p class="form-error" *ngIf="editUserError">{{ editUserError }}</p>
+
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="
+          isSubmittingEditUser ||
+          !editUserForm.email.trim() ||
+          !editUserForm.first_name.trim() ||
+          !editUserForm.last_name.trim() ||
+          !editUserForm.role
+        "
+      >
+        Valider
+      </button>
+      <button mat-stroked-button type="button" (click)="cancelEditUser()" [disabled]="isSubmittingEditUser">Annuler</button>
+    </div>
+  </form>
+
+  <p class="info-message" *ngIf="temporaryPassword">{{ temporaryPassword }}</p>
+
+  <div class="filters">
+    <mat-form-field appearance="outline">
+      <mat-label>Role</mat-label>
+      <mat-select [(ngModel)]="roleFilter" (selectionChange)="loadUsers()">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let role of roleOptions" [value]="role">{{ role }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Clinic</mat-label>
+      <mat-select [(ngModel)]="clinicFilter" (selectionChange)="loadUsers()">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let clinic of clinics" [value]="clinic.id">{{ clinic.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="activeFilter" (selectionChange)="loadUsers()">
+        <mat-option value="">All</mat-option>
+        <mat-option value="true">Active</mat-option>
+        <mat-option value="false">Inactive</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="loadUsers()">Apply</button>
+  </div>
+
+  <table mat-table [dataSource]="users" class="users-table">
+    <!-- Name -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nom</th>
+      <td mat-cell *matCellDef="let user">{{ user.first_name }} {{ user.last_name }}</td>
+    </ng-container>
+
+    <!-- Email -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+    </ng-container>
+
+    <!-- Role -->
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef>Rôle</th>
+      <td mat-cell *matCellDef="let user">{{ user.role }}</td>
+    </ng-container>
+
+    <!-- Clinic -->
+    <ng-container matColumnDef="clinic">
+      <th mat-header-cell *matHeaderCellDef>Clinique</th>
+      <td mat-cell *matCellDef="let user">{{ user.clinic_name || user.clinic || '-' }}</td>
+    </ng-container>
+
+    <!-- Active -->
+    <ng-container matColumnDef="active">
+      <th mat-header-cell *matHeaderCellDef>Actif</th>
+      <td mat-cell *matCellDef="let user">
+        <mat-slide-toggle color="primary" [checked]="user.is_active" (change)="toggleActive(user)"></mat-slide-toggle>
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let user" class="actions-cell">
+        <button mat-icon-button color="primary" (click)="openEditUserForm(user)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="resetPassword(user)"><mat-icon>lock_reset</mat-icon></button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
