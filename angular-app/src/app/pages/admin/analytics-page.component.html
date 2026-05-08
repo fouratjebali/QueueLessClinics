@@ -1,0 +1,130 @@
+<div class="analytics-page">
+  <h2>Global Analytics</h2>
+  <p>Default view is all-time data across all clinics.</p>
+
+  <div class="top-actions">
+    <button mat-stroked-button color="primary" (click)="exportCsv()">Export CSV</button>
+    <button mat-stroked-button color="accent" (click)="exportPdf()">Export PDF</button>
+  </div>
+
+  <div class="metrics-grid" *ngIf="overview">
+    <app-kpi-card title="Total clinics" [value]="overview.total_clinics"></app-kpi-card>
+    <app-kpi-card title="Active clinics" [value]="overview.active_clinics"></app-kpi-card>
+    <app-kpi-card title="Total tickets" [value]="overview.total_tickets"></app-kpi-card>
+    <app-kpi-card title="Total queues" [value]="overview.total_queues"></app-kpi-card>
+    <app-kpi-card title="Users" [value]="overview.total_users"></app-kpi-card>
+    <app-kpi-card title="Active users" [value]="overview.active_users"></app-kpi-card>
+    <app-kpi-card title="Services" [value]="overview.total_services"></app-kpi-card>
+    <app-kpi-card title="Avg wait time" [value]="overview.avg_wait_time + ' min'"></app-kpi-card>
+    <app-kpi-card title="No-show rate" [value]="overview.no_show_rate + '%'"></app-kpi-card>
+    <app-kpi-card title="Notifications" [value]="overview.notifications_total"></app-kpi-card>
+    <app-kpi-card title="Notif delivery" [value]="overview.notifications_delivery_rate + '%'"></app-kpi-card>
+  </div>
+
+  <div class="tables">
+    <div class="panel">
+      <h3>Tickets per Clinic</h3>
+      <table mat-table [dataSource]="ranking" class="table">
+        <ng-container matColumnDef="clinic__name">
+          <th mat-header-cell *matHeaderCellDef>Clinic</th>
+          <td mat-cell *matCellDef="let r">{{ r.clinic__name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="total_tickets">
+          <th mat-header-cell *matHeaderCellDef>Tickets</th>
+          <td mat-cell *matCellDef="let r">{{ r.total_tickets }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['clinic__name', 'total_tickets']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['clinic__name', 'total_tickets'];"></tr>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h3>Tickets Timeseries</h3>
+      <table mat-table [dataSource]="timeseries" class="table">
+        <ng-container matColumnDef="bucket">
+          <th mat-header-cell *matHeaderCellDef>Bucket</th>
+          <td mat-cell *matCellDef="let r">{{ r.bucket }}</td>
+        </ng-container>
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let r">{{ r.total }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['bucket', 'total']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['bucket', 'total'];"></tr>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h3>Status Distribution</h3>
+      <table mat-table [dataSource]="overview?.status_counts || statusDistribution" class="table">
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let r">{{ r.status }}</td>
+        </ng-container>
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let r">{{ r.total }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['status', 'total']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['status', 'total'];"></tr>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h3>Priority Distribution</h3>
+      <table mat-table [dataSource]="overview?.priority_counts || []" class="table">
+        <ng-container matColumnDef="priority">
+          <th mat-header-cell *matHeaderCellDef>Priority</th>
+          <td mat-cell *matCellDef="let r">{{ r.priority }}</td>
+        </ng-container>
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let r">{{ r.total }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['priority', 'total']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['priority', 'total'];"></tr>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h3>Peak Hours Heatmap Data</h3>
+      <table mat-table [dataSource]="peakHours" class="table">
+        <ng-container matColumnDef="weekday">
+          <th mat-header-cell *matHeaderCellDef>Weekday</th>
+          <td mat-cell *matCellDef="let r">{{ r.weekday }}</td>
+        </ng-container>
+        <ng-container matColumnDef="hour">
+          <th mat-header-cell *matHeaderCellDef>Hour</th>
+          <td mat-cell *matCellDef="let r">{{ r.hour }}</td>
+        </ng-container>
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let r">{{ r.total }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['weekday', 'hour', 'total']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['weekday', 'hour', 'total'];"></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="filters bottom-filters">
+    <h3>Filter Analytics by Date</h3>
+    <mat-form-field appearance="outline">
+      <mat-label>From</mat-label>
+      <input matInput type="date" [(ngModel)]="fromDate" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>To</mat-label>
+      <input matInput type="date" [(ngModel)]="toDate" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Timeseries Group</mat-label>
+      <mat-select [(ngModel)]="group">
+        <mat-option value="day">Day</mat-option>
+        <mat-option value="week">Week</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="loadData()">Apply Filter</button>
+    <button mat-button (click)="fromDate=''; toDate=''; loadData()">Reset</button>
+  </div>
+</div>
